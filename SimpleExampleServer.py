@@ -7,6 +7,7 @@ import signal
 import sys
 import ssl
 import logging
+from datetime import datetime
 from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer, SimpleSSLWebSocketServer
 from optparse import OptionParser
 
@@ -36,6 +37,15 @@ class SimpleChat(WebSocket):
     def handleMessage(self):
         if self.data is None:
             self.data = ''
+
+        if str(self.data) == 'getTime':
+          try:
+            print str(datetime.now())
+            self.sendMessage(str(datetime.now()))
+          except Exception as n:
+            print n
+          finally:
+            return
 
         for client in self.server.connections.itervalues():
             if client != self:
